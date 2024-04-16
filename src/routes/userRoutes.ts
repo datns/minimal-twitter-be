@@ -66,7 +66,7 @@ router.delete('/:id', async (req, res) => {
   await prisma.user.delete({ where: {
     id: Number(id)
   }})
-  res.sendStatus(200);4
+  res.sendStatus(200);
 })
 
 export default router;
