@@ -1,21 +1,24 @@
 import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 const prisma = new PrismaClient();
 
 // Create tweet
 router.post('/', async (req, res) => {
-  const { content, image, userId } = req.body
-  try {
-    const result = await prisma.tweet.create({
+  const { content, image } = req.body
+  //@ts-ignore
+  const user = req.user;
+try {
+
+     const result = await prisma.tweet.create({
       data: {
         content,
         image,
-        userId,
+        userId: user.id
       }
     })
-
     res.json(result)
   } catch (e) {
     res.status(400).json({ error: "Failed to create tweet" })
@@ -41,6 +44,9 @@ router.get('/:id', async (req, res) => {
   const tweet = await prisma.tweet.findUnique({
     where: {
       id: Number(id)
+    },
+    include: {
+      user: true,
     }
   })
 
