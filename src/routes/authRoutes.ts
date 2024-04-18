@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 const EMAIL_TOKEN_EXPIRATION_MINUTES = 10;
 const AUTHENTICATION_EXPIRATION_HOURS = 12;
-const JWT_SECRET = "secret key";
+const JWT_SECRET = process.env.JWT_SECRET || "";
 
 function generateEmailToken(): string {
   return Math.floor(10000000 + Math.random() * 90000000).toString();
@@ -44,6 +44,8 @@ router.post('/login', async(req, res) => {
       }
     }
   })
+
+  // TODO: send emailToken to user's email
   res.sendStatus(200);
 } catch(err) {
   console.log(err);
